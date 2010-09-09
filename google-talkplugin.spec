@@ -1,3 +1,5 @@
+# NOTE
+# - it needs openssl-0.9.8 at runtime
 Summary:	Call phones from Gmail
 Name:		google-talkplugin
 Version:	1.4.1.0
@@ -65,7 +67,7 @@ dst=$(echo $org | %{__sed} -re "s,^.{$len},$src"'\\x0,')
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_libdir}/gtalk,%{_browserpluginsdir}}
 # plugin
-install -p libnpgoogletalk64.so libnpgtpo3dautoplugin.so $RPM_BUILD_ROOT%{_browserpluginsdir}
+install -p libnpgoogletalk*.so libnpgtpo3dautoplugin.so $RPM_BUILD_ROOT%{_browserpluginsdir}
 # support libs
 install -p lib/*.so $RPM_BUILD_ROOT%{_libdir}/gtalk
 # hmmz, 32bit
@@ -88,5 +90,5 @@ fi
 %attr(755,root,root) %{_libdir}/gtalk/libCg.so
 %attr(755,root,root) %{_libdir}/gtalk/libCgGL.so
 %attr(755,root,root) %{_libdir}/gtalk/GoogleTalkPlugin
-%attr(755,root,root) %{_browserpluginsdir}/libnpgoogletalk64.so
+%attr(755,root,root) %{_browserpluginsdir}/libnpgoogletalk*.so
 %attr(755,root,root) %{_browserpluginsdir}/libnpgtpo3dautoplugin.so
