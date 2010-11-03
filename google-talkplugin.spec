@@ -2,14 +2,14 @@
 # - it needs openssl-0.9.8 at runtime
 Summary:	Call phones from Gmail
 Name:		google-talkplugin
-Version:	1.4.1.0
-Release:	0.8
+Version:	1.5.1.0
+Release:	0.1
 License:	Multiple, see http://chrome.google.com/
 Group:		Applications/Networking
 Source0:	http://dl.google.com/linux/direct/%{name}_current_i386.deb
-# Source0-md5:	876920feee6dfbe393a45efdef05d83c
+# Source0-md5:	4293b2d5ad4a3098fc06a9b35056c290
 Source1:	http://dl.google.com/linux/direct/%{name}_current_amd64.deb
-# Source1-md5:	d2d48903dbc6ea36cc175898e6d5f7db
+# Source1-md5:	737283cd4e504dc5d3add2cb057bd273
 URL:		http://www.google.com/chat/voice/
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sed >= 4.0
