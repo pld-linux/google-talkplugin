@@ -5,9 +5,11 @@ Release:	0.1
 License:	Multiple, see http://chrome.google.com/
 Group:		Applications/Networking
 Source0:	http://dl.google.com/linux/talkplugin/rpm/stable/i386/%{name}-%{version}-1.i386.rpm
-# Source0-md5:	1416f39d4f53ccba0dc28187108a7650
+# NoSource0-md5:	1416f39d4f53ccba0dc28187108a7650
+NoSource:	0
 Source1:	http://dl.google.com/linux/talkplugin/rpm/stable/x86_64/%{name}-%{version}-1.x86_64.rpm
-# Source1-md5:	a05df0c17c3fc9df2c9ae4d9d18de8aa
+# NoSource1-md5:	a05df0c17c3fc9df2c9ae4d9d18de8aa
+NoSource:	1
 URL:		http://www.google.com/chat/video/
 BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.453
