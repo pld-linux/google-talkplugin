@@ -11,7 +11,6 @@ Source1:	http://dl.google.com/linux/talkplugin/rpm/stable/x86_64/%{name}-%{versi
 # NoSource1-md5:	a05df0c17c3fc9df2c9ae4d9d18de8aa
 NoSource:	1
 URL:		http://www.google.com/chat/video/
-BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	sed >= 4.0
 Requires:	browser-plugins >= 2.0
@@ -55,7 +54,7 @@ dst=///////usr/lib64/gtalk/
 %else
 dst=/////////usr/lib/gtalk/
 %endif
-perl -pi -e "s#/opt/google/talkplugin/#$dst#g" *.so GoogleTalkPlugin
+sed -i -e "s#/opt/google/talkplugin/#$dst#g" *.so GoogleTalkPlugin
 
 %install
 rm -rf $RPM_BUILD_ROOT
