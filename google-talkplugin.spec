@@ -47,13 +47,16 @@ mv ./opt/google/talkplugin/* .
 # must be shorter than: RPATH=/opt/google/talkplugin/lib
 chrpath -r %{_libdir}/gtalk libnpgtpo3dautoplugin.so
 
-# hack: replace $org with target path
+# hack: replace $org with target path in binaries
+org=/opt/google/talkplugin/
 %if "%{_lib}" == "lib64"
 dst=///////usr/lib64/gtalk/
 %else
 dst=/////////usr/lib/gtalk/
 %endif
-sed -i -e "s#/opt/google/talkplugin/#$dst#g" *.so GoogleTalkPlugin
+# length must be identical!
+test $(echo -n "$org" | wc -c) = $(echo -n "$dst" | wc -c)
+%{__sed} -i~ -e "s,$org,$dst,g" *.so GoogleTalkPlugin
 
 %install
 rm -rf $RPM_BUILD_ROOT
