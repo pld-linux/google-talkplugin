@@ -42,7 +42,6 @@ fi
 rpm2cpio $SOURCE | cpio -i -d
 
 mv ./opt/google/talkplugin/* .
-#cron/google-talkplugin
 
 %build
 # must be shorter than: RPATH=/opt/google/talkplugin/lib
@@ -58,7 +57,7 @@ sed -i -e "s#/opt/google/talkplugin/#$dst#g" *.so GoogleTalkPlugin
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir}/gtalk,%{_datadir}/locale,%{_browserpluginsdir}}
+install -d $RPM_BUILD_ROOT{%{_libdir}/gtalk,%{_localedir},%{_browserpluginsdir}}
 # plugin
 install -p libgoogletalkremoting.so libnpgoogletalk*.so libnpgtpo3dautoplugin.so libnpo1d.so $RPM_BUILD_ROOT%{_browserpluginsdir}
 # support libs
@@ -67,13 +66,13 @@ install -p lib/*.so $RPM_BUILD_ROOT%{_libdir}/gtalk
 install -p GoogleTalkPlugin $RPM_BUILD_ROOT%{_libdir}/gtalk
 cp -p windowpicker.glade $RPM_BUILD_ROOT%{_libdir}/gtalk
 
-cp -a locale/* $RPM_BUILD_ROOT%{_datadir}/locale
+cp -a locale/* $RPM_BUILD_ROOT%{_localedir}
 
 # google dudes don't get the locales right, fixup
-mv $RPM_BUILD_ROOT%{_datadir}/locale/{no,nb}
-mv $RPM_BUILD_ROOT%{_datadir}/locale/{pt-PT,pt}
+mv $RPM_BUILD_ROOT%{_localedir}/{no,nb}
+mv $RPM_BUILD_ROOT%{_localedir}/{pt-PT,pt}
 
-for loc in $RPM_BUILD_ROOT%{_datadir}/locale/*-*; do
+for loc in $RPM_BUILD_ROOT%{_localedir}/*-*; do
 	d=$(dirname $loc)
 	b=$(basename $loc | tr '-' '_')
 	newloc="$d/$b"
@@ -81,8 +80,8 @@ for loc in $RPM_BUILD_ROOT%{_datadir}/locale/*-*; do
 done
 
 # not supported in pld
-rm -r $RPM_BUILD_ROOT%{_datadir}/locale/es_419
-rm -r $RPM_BUILD_ROOT%{_datadir}/locale/iw
+rm -r $RPM_BUILD_ROOT%{_localedir}/es_419
+rm -r $RPM_BUILD_ROOT%{_localedir}/iw
 
 %find_lang windowpicker
 
