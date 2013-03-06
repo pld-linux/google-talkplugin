@@ -1,10 +1,16 @@
 #!/bin/sh
-# arch to check package. irrelevant for actual arch
-arch=x86_64
 # branch: stable, beta, unstable. default: stable
 branch=${1:-stable}
+# arch to check package. irrelevant for actual arch
+arch=x86_64
 
-case "${branch}" in
+pkg=google-talkplugin
+specfile=$pkg.spec
+sourceurl=http://dl.google.com/linux/talkplugin/rpm/stable/$arch/
+
+set -e
+
+case "$branch" in
 	stable|beta|unstable)
 		;;
 	*)
@@ -13,16 +19,10 @@ case "${branch}" in
 		;;
 esac
 
-sourceurl=http://dl.google.com/linux/talkplugin/rpm/stable/$arch
-
 set -e
 
 echo -n "Fetching latest version... "
 t=$(mktemp)
-
-# poldek is buggy, see https://bugs.launchpad.net/poldek/+bug/1026762
-#poldek -q --st=metadata --source "$sourceurl/" --update
-#poldek -q --skip-installed --st=metadata --source "$sourceurl/" --cmd "ls google-chrome-$branch" > $t
 
 wget -c $sourceurl/repodata/primary.xml.gz
 zcat primary.xml.gz | perl -ne 'm{<name>google-talkplugin</name>} and m{<version epoch="0" ver="([\d.]+)" rel="(\d+)"/>} and print "$1 $2"' > $t
