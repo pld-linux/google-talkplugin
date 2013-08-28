@@ -5,10 +5,10 @@ Release:	1
 License:	Multiple, see http://chrome.google.com/
 Group:		Applications/Networking
 Source0:	http://dl.google.com/linux/talkplugin/rpm/stable/i386/%{name}-%{version}-1.i386.rpm
-# NoSource0-md5:	
+# NoSource0-md5:	350a764b6c21821817434b11e573d2e8
 NoSource:	0
 Source1:	http://dl.google.com/linux/talkplugin/rpm/stable/x86_64/%{name}-%{version}-1.x86_64.rpm
-# NoSource1-md5:	
+# NoSource1-md5:	3978220c8a5a5a00145728dc15445661
 NoSource:	1
 URL:		http://www.google.com/chat/video/
 BuildRequires:	rpmbuild(macros) >= 1.453
