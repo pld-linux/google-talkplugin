@@ -44,9 +44,6 @@ rpm2cpio $SOURCE | cpio -i -d
 mv ./opt/google/talkplugin/* .
 
 %build
-# must be shorter than: RPATH=/opt/google/talkplugin/lib
-chrpath -r %{_libdir}/gtalk libnpgtpo3dautoplugin.so
-
 # hack: replace $org with target path in binaries
 org=/opt/google/talkplugin/
 %if "%{_lib}" == "lib64"
@@ -61,12 +58,16 @@ test $(echo -n "$org" | wc -c) = $(echo -n "$dst" | wc -c)
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_libdir}/gtalk,%{_localedir},%{_browserpluginsdir}}
-# plugin
-install -p libgoogletalkremoting.so libnpgoogletalk*.so libnpgtpo3dautoplugin.so libnpo1d.so $RPM_BUILD_ROOT%{_browserpluginsdir}
+# pepper
+install -p libppgoogletalk.so libppo1d.so $RPM_BUILD_ROOT%{_browserpluginsdir}
+
+# npapi
+install -p libnpgoogletalk.so libnpo1d.so $RPM_BUILD_ROOT%{_browserpluginsdir}
+
 # support libs
-install -p lib/*.so $RPM_BUILD_ROOT%{_libdir}/gtalk
-#
 install -p GoogleTalkPlugin $RPM_BUILD_ROOT%{_libdir}/gtalk
+install -p libgoogletalkremoting.so $RPM_BUILD_ROOT%{_libdir}/gtalk
+cp -a data $RPM_BUILD_ROOT%{_libdir}/gtalk
 cp -p windowpicker.glade $RPM_BUILD_ROOT%{_libdir}/gtalk
 
 cp -a locale/* $RPM_BUILD_ROOT%{_localedir}
@@ -99,14 +100,44 @@ if [ "$1" = 0 ]; then
 	%update_browser_plugins
 fi
 
+# FIXME: chrome searches from pepper dir, our browser-plugins can't handle that
+# see https://chromium.googlesource.com/chromium/chromium/+/trunk/chrome/common/chrome_paths.cc
+%triggerin -- google-chrome
+d=%{_libdir}/google-chrome/pepper
+test -d "$d" || exit 0
+for fn in libppgoogletalk.so libppo1d.so; do
+	f=$d/$fn
+	test -e $f || ln -sf %{_browserpluginsdir}/$nf $f
+done
+
+%triggerun -- google-chrome
+if [ "$1" = "0" ] || [ "$2" = "0" ]; then
+	rm -f %{_libdir}/google-chrome/pepper/{libppgoogletalk.so,libppo1d.so}
+fi
+
+%triggerin -- chromium-browser
+d=%{_libdir}/chromium-browser/pepper
+test -d "$d" || exit 0
+for fn in libppgoogletalk.so libppo1d.so; do
+	f=$d/$fn
+	test -e $f || ln -sf %{_browserpluginsdir}/$nf $f
+done
+
+%triggerun -- chromium-browser
+if [ "$1" = "0" ] || [ "$2" = "0" ]; then
+	rm -f %{_libdir}/chromium-browser/pepper/{libppgoogletalk.so,libppo1d.so}
+fi
+
 %files -f windowpicker.lang
 %defattr(644,root,root,755)
-%dir %{_libdir}/gtalk
-%attr(755,root,root) %{_libdir}/gtalk/libCg.so
-%attr(755,root,root) %{_libdir}/gtalk/libCgGL.so
-%attr(755,root,root) %{_libdir}/gtalk/GoogleTalkPlugin
-%{_libdir}/gtalk/windowpicker.glade
-%attr(755,root,root) %{_browserpluginsdir}/libgoogletalkremoting.so
-%attr(755,root,root) %{_browserpluginsdir}/libnpgoogletalk*.so
-%attr(755,root,root) %{_browserpluginsdir}/libnpgtpo3dautoplugin.so
+%attr(755,root,root) %{_browserpluginsdir}/libnpgoogletalk.so
 %attr(755,root,root) %{_browserpluginsdir}/libnpo1d.so
+%attr(755,root,root) %{_browserpluginsdir}/libppgoogletalk.so
+%attr(755,root,root) %{_browserpluginsdir}/libppo1d.so
+%dir %{_libdir}/gtalk
+%attr(755,root,root) %{_libdir}/gtalk/GoogleTalkPlugin
+%attr(755,root,root) %{_libdir}/gtalk/libgoogletalkremoting.so
+%{_libdir}/gtalk/windowpicker.glade
+%dir %{_libdir}/gtalk/data
+%{_libdir}/gtalk/data/LMspeed_510.emd
+%{_libdir}/gtalk/data/SFTprec_120.emd
