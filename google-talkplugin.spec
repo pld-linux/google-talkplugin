@@ -1,14 +1,14 @@
 Summary:	Call phones from Gmail
 Name:		google-talkplugin
-Version:	5.4.2.0
+Version:	5.38.6.0
 Release:	1
 License:	Multiple, see http://chrome.google.com/
 Group:		Applications/Networking
 Source0:	http://dl.google.com/linux/talkplugin/rpm/stable/i386/%{name}-%{version}-1.i386.rpm
-# NoSource0-md5:	c015efe94a6639c437d6f52239eb6575
+# NoSource0-md5:	688df0620a710a75de0922e406522b84
 NoSource:	0
 Source1:	http://dl.google.com/linux/talkplugin/rpm/stable/x86_64/%{name}-%{version}-1.x86_64.rpm
-# NoSource1-md5:	7ef0bfd1f710404266ea0f6565537a03
+# NoSource1-md5:	904102bdcf2e709c017c7098bc71313d
 NoSource:	1
 URL:		http://www.google.com/chat/video/
 BuildRequires:	rpmbuild(macros) >= 1.453
